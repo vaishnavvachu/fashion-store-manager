@@ -4,7 +4,9 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5.0f;
     private CharacterController _characterController;
+   
 
+    
     private void Start()
     {
         _characterController = GetComponent<CharacterController>();
@@ -32,4 +34,6 @@ public class PlayerController : MonoBehaviour
             interactable.OnInteracted();
         }
     }
+    
+    
 }
