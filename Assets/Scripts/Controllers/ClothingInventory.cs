@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-
-
 public class ClothingInventory : MonoBehaviour
 {
     private List<ClothingItem> inventory = new List<ClothingItem>();
