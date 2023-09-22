@@ -2,34 +2,34 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public CustomerState customerState;
-    public PlayerState playerState;
-    public PlayerController playerController;
     
-    private static GameManager instance;
+    [SerializeField] private PlayerController playerController;
+    
+    private PlayerState _playerState;
+    private static GameManager _instance;
 
     public static GameManager Instance
     {
         get
         {
-            if (instance == null)
+            if (_instance == null)
             {
-                instance = FindObjectOfType<GameManager>();
-                if (instance == null)
+                _instance = FindObjectOfType<GameManager>();
+                if (_instance == null)
                 {
                     GameObject obj = new GameObject("GameManager");
-                    instance = obj.AddComponent<GameManager>();
+                    _instance = obj.AddComponent<GameManager>();
                 }
             }
-            return instance;
+            return _instance;
         }
     }
 
     private void Awake()
     {
-        if (instance == null)
+        if (_instance == null)
         {
-            instance = this;
+            _instance = this;
             DontDestroyOnLoad(this);
         }
         else
@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
 
     public void UpdatePlayerState(PlayerState playerState)
     {
-       playerController.ChangeState(this.playerState);
+       playerController.ChangeState(playerState);
     }
     
 }

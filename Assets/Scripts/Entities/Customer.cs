@@ -13,9 +13,13 @@ public class Customer : MonoBehaviour, IInteractable
     [SerializeField] private ClothingItem requestedCloth; 
     private CustomerState _currentState = CustomerState.WalkIn;
 
+    private void Start()
+    {
+        UpdateCustomerState(_currentState);
+    }
+
     public void OnInteracted()
     {
-        Debug.Log("OnInteracted");
         if(_currentState == CustomerState.WalkIn)
         {
             UpdateCustomerState(CustomerState.ClothReceived);
@@ -24,11 +28,11 @@ public class Customer : MonoBehaviour, IInteractable
 
     public void UpdateCustomerState(CustomerState customerState)
     {
-        Debug.Log("Customer CurrentState: "+customerState);
             switch (customerState)
             {
                 case CustomerState.WalkIn:
                     _currentState = CustomerState.WalkIn;
+                    OnCustomerWalkin();
                     break;
                 case CustomerState.ClothReceived:
                     _currentState = CustomerState.ClothReceived;
@@ -45,12 +49,17 @@ public class Customer : MonoBehaviour, IInteractable
             }
     }
 
+    private void OnCustomerWalkin()
+    {
+       UIManager.Instance.ShowCustomerSpeechBubble("Red");
+    }
+
     void OnClothReceived()
     {
         if (ClothingInventory.Instance.ClothingMatchesCustomerRequest(requestedCloth))
         {
             ClothingInventory.Instance.RemoveClothingItem(requestedCloth);
-            Debug.Log("Customer received the requested cloth: " + requestedCloth.itemName);
+            UIManager.Instance.ShowCustomerSpeechBubble("Cloth Received");
             GameManager.Instance.UpdatePlayerState(PlayerState.ClothDelivered);
             UpdateCustomerState(CustomerState.Happy);
         }
@@ -62,12 +71,12 @@ public class Customer : MonoBehaviour, IInteractable
     }
     void OnHappy()
     {
+        UIManager.Instance.ShowCustomerSpeechBubble("Happy");
         UpdateCustomerState(CustomerState.Leaving);
-        Debug.Log("Throw Cash");
     }
 
     void OnLeave()
     {
-        Debug.Log("Customer Leaves");
+        UIManager.Instance.ShowCustomerSpeechBubble("Thank you");
     }
 }

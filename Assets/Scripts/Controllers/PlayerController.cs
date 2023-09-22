@@ -48,23 +48,40 @@ public class PlayerController : MonoBehaviour
     public void ChangeState(PlayerState newState)
     {
         _currentState = newState;
-        Debug.Log("Player CurrentState: "+_currentState);
         switch (_currentState)
         {
             case PlayerState.Idle:
+                OnIdle();
                 break;
             case PlayerState.ClothCollected:
-                ClothCollectedState();
+                OnClothCollectedState();
                 break;
             case PlayerState.ClothDelivered:
+                OnClothDelivered();
                 break;
             case PlayerState.CashCollected:
+                OnCashCollected();
                 break;
         }
     }
 
-    private void ClothCollectedState()
+    private void OnCashCollected()
     {
-        throw new System.NotImplementedException();
+        UIManager.Instance.ShowCashCollectedUIFx();
+    }
+
+    private void OnClothDelivered()
+    {
+        UIManager.Instance.ShowPlayerSpeechBubble("Collect Cash");
+    }
+
+    private void OnIdle()
+    {
+        UIManager.Instance.ShowPlayerSpeechBubble("Goto Rack");
+    }
+
+    private void OnClothCollectedState()
+    {
+        UIManager.Instance.ShowPlayerSpeechBubble("Goto Customer");
     }
 }
