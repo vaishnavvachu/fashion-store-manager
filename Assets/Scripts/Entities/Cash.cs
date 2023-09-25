@@ -5,5 +5,6 @@ public class Cash : MonoBehaviour, IInteractable
     public void OnInteracted()
     {
         GameManager.Instance.UpdatePlayerState(PlayerState.CashCollected);
+        gameObject.SetActive(false);
     }
 }

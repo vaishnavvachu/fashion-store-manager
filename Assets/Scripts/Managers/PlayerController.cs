@@ -11,8 +11,6 @@ public enum PlayerState
 
 public class PlayerController : MonoBehaviour
 {
-    public bool isKeyboard;
-    
     [SerializeField] private float moveSpeed = 5.0f;
     [SerializeField] private Animator playerAnimator;
 

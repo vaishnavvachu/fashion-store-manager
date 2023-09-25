@@ -52,6 +52,6 @@ public class UIManager : MonoBehaviour
 
    public void ShowCashCollectedUIFx()
     {
-        Debug.Log("Show Cash Collected");
+        playerSpeechBubbleText.text = "Money Earned";
     }
 }

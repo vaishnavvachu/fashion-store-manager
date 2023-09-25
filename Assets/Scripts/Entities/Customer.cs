@@ -15,19 +15,24 @@ public class Customer : MonoBehaviour, IInteractable
     [SerializeField] private Transform targetPosition;
     [SerializeField] private float duration = 1.0f;
     [SerializeField] private Animator animator;
-    
+
+    private Vector3 _initialPos;
     private CustomerState _currentState = CustomerState.WalkIn;
 
     private void Start()
     {
         UpdateCustomerState(_currentState);
-        MoveObject();
+        GameObject cash = ObjectPoolManager.Instance.GetObjectFromPool("Cash");
+        cash.transform.position = transform.position;
+        _initialPos = transform.position;
+        
+        MoveObject(targetPosition.position);
     }
     
-    private void MoveObject()
+    private void MoveObject(Vector3 pos)
     {
         
-        transform.DOMove(targetPosition.position, duration)
+        transform.DOMove(pos, duration)
             .SetEase(Ease.Linear)
             .OnComplete(() =>
             {
@@ -89,11 +94,14 @@ public class Customer : MonoBehaviour, IInteractable
     void OnHappy()
     {
         UIManager.Instance.ShowCustomerSpeechBubble("Happy");
+        GameObject cash = ObjectPoolManager.Instance.GetObjectFromPool("Cash");
+        cash.transform.position = transform.position;
         UpdateCustomerState(CustomerState.Leaving);
     }
 
     void OnLeave()
     {
+        MoveObject(_initialPos);
         UIManager.Instance.ShowCustomerSpeechBubble("Thank you");
     }
 }

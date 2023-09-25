@@ -5,39 +5,39 @@ using UnityEngine.UI;
 
 public class ClothingInventory : MonoBehaviour
 {
-    private List<ClothingItem> inventory = new List<ClothingItem>();
+    private List<ClothingItem> _inventory = new List<ClothingItem>();
     [SerializeField] private int maxClothes = 5;
     [SerializeField] private Transform clothHolder;
     [SerializeField] private Image loadingImage;
     
-    private static ClothingInventory instance; 
+    private static ClothingInventory _instance; 
    
     public static ClothingInventory Instance
     {
         get
         {
-            if (instance == null)
+            if (_instance == null)
             {
-                instance = FindObjectOfType<ClothingInventory>();
-                if (instance == null)
+                _instance = FindObjectOfType<ClothingInventory>();
+                if (_instance == null)
                 {
                     GameObject obj = new GameObject("ClothingInventory");
-                    instance = obj.AddComponent<ClothingInventory>();
+                    _instance = obj.AddComponent<ClothingInventory>();
                 }
             }
-            return instance;
+            return _instance;
         }
     }
 
     private void Awake()
     {
-        if (instance != null && instance != this)
+        if (_instance != null && _instance != this)
         {
             Destroy(this.gameObject);
             return;
         }
 
-        instance = this;
+        _instance = this;
         
         loadingImage.gameObject.SetActive(false);
         
@@ -61,10 +61,10 @@ public class ClothingInventory : MonoBehaviour
             loadingImage.fillAmount = elapsedTime / 2;
             yield return null;
         }
-        if (inventory.Count < maxClothes)
+        if (_inventory.Count < maxClothes)
         {
-            inventory.Add(clothingItem);
-            Vector3 stackPosition = Vector3.up * inventory.Count * 0.5f; 
+            _inventory.Add(clothingItem);
+            Vector3 stackPosition = Vector3.up * _inventory.Count * 0.5f; 
             GameObject clothingObject = Instantiate(clothingItem.itemPrefab, clothHolder);
             clothingObject.transform.localPosition = stackPosition; 
         }
@@ -78,32 +78,32 @@ public class ClothingInventory : MonoBehaviour
     
     public bool ClothingMatchesCustomerRequest(ClothingItem clothingItem)
     {
-        foreach (ClothingItem item in inventory)
+        foreach (ClothingItem item in _inventory)
         {
             Debug.Log("- " + item.itemName);
         }
 
-        return inventory.Contains(clothingItem);
+        return _inventory.Contains(clothingItem);
     }
 
 
     public void RemoveClothingItem(ClothingItem clothingItem)
     {
-        if (inventory.Contains(clothingItem))
+        if (_inventory.Contains(clothingItem))
         {
-            inventory.Remove(clothingItem);
+            _inventory.Remove(clothingItem);
         }
     }
 
     private void DropAllClothes()
     {
-        foreach (ClothingItem item in inventory)
+        foreach (ClothingItem item in _inventory)
         {
             if (item.itemPrefab != null)
             {
                 Instantiate(item.itemPrefab, transform.position, Quaternion.identity);
             }
         }
-        inventory.Clear();
+        _inventory.Clear();
     }
 }
