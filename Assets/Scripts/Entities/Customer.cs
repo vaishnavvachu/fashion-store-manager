@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 [System.Serializable]
@@ -11,11 +12,27 @@ public enum CustomerState
 public class Customer : MonoBehaviour, IInteractable
 {
     [SerializeField] private ClothingItem requestedCloth; 
+    [SerializeField] private Transform targetPosition;
+    [SerializeField] private float duration = 1.0f;
+    [SerializeField] private Animator animator;
+    
     private CustomerState _currentState = CustomerState.WalkIn;
 
     private void Start()
     {
         UpdateCustomerState(_currentState);
+        MoveObject();
+    }
+    
+    private void MoveObject()
+    {
+        
+        transform.DOMove(targetPosition.position, duration)
+            .SetEase(Ease.Linear)
+            .OnComplete(() =>
+            {
+                animator.Play("Idle");
+            });
     }
 
     public void OnInteracted()
