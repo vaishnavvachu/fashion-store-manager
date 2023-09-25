@@ -22,8 +22,8 @@ public class Customer : MonoBehaviour, IInteractable
     private void Start()
     {
         UpdateCustomerState(_currentState);
-        GameObject cash = ObjectPoolManager.Instance.GetObjectFromPool("Cash");
-        cash.transform.position = transform.position;
+        // GameObject cash = ObjectPoolManager.Instance.GetObjectFromPool("Cash");
+        // cash.transform.position = transform.position;
         _initialPos = transform.position;
         
         MoveObject(targetPosition.position);
