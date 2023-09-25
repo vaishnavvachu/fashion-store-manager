@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac4690c0d66344fa1a0566420eb9f182, type: 3}
   m_Name: Tee
   m_EditorClassIdentifier: 
-  itemName: a
+  itemName: Tee
   itemPrefab: {fileID: 8762901455268009623, guid: f59ab12c487fd47f0a0d75e0438f68f7, type: 3}

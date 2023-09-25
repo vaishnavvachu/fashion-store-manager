@@ -11,30 +11,73 @@ public enum PlayerState
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 5.0f;
-    private CharacterController _characterController;
-   
-    private PlayerState _currentState;
+    public bool isKeyboard;
     
+    [SerializeField] private float moveSpeed = 5.0f;
+    [SerializeField] private Animator playerAnimator;
+
+    private CharacterController _characterController;
+    private PlayerState _currentState;
+    private Vector3 _velocity = Vector3.zero; 
+ 
+
     private void Start()
     {
         _characterController = GetComponent<CharacterController>();
-        
+
         _currentState = PlayerState.Idle;
     }
 
     private void Update()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
-        Vector3 moveDirection = new Vector3(horizontalInput, 0.0f, verticalInput);
-        moveDirection.Normalize();
-        moveDirection = transform.TransformDirection(moveDirection);
-        
-        Vector3 moveVelocity = moveDirection * moveSpeed;
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.touches[0];
 
-        _characterController.Move(moveVelocity * Time.deltaTime);
+            switch (touch.phase)
+            {
+                case TouchPhase.Began:
+                    _velocity = Vector3.zero; 
+                    playerAnimator.SetBool("isWalking",false);
+                    break;
+
+                case TouchPhase.Moved:
+                    Vector2 swipeDirection = touch.deltaPosition.normalized;
+                    playerAnimator.SetBool("isWalking",true);
+                    if (Mathf.Abs(swipeDirection.x) > Mathf.Abs(swipeDirection.y))
+                    {
+                        if (swipeDirection.x > 0)
+                        {
+                            _velocity = Vector3.right * moveSpeed;
+                        }
+                        else
+                        {
+                            _velocity = Vector3.left * moveSpeed;
+                        }
+                    }
+                    else
+                    {
+                        if (swipeDirection.y > 0)
+                        {
+                            _velocity = Vector3.forward * moveSpeed;
+                        }
+                        else
+                        {
+                            _velocity = Vector3.back * moveSpeed;
+                        }
+                    }
+                    break;
+            }
+        }
+        else
+        {
+            _velocity = Vector3.zero;
+            playerAnimator.SetBool("isWalking",false);
+        }
+        
+        _characterController.SimpleMove(_velocity);
     }
+    
 
     private void OnCollisionEnter(Collision other)
     {
@@ -84,4 +127,5 @@ public class PlayerController : MonoBehaviour
     {
         UIManager.Instance.ShowPlayerSpeechBubble("Goto Customer");
     }
+    
 }

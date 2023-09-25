@@ -51,7 +51,7 @@ public class Customer : MonoBehaviour, IInteractable
 
     private void OnCustomerWalkin()
     {
-       UIManager.Instance.ShowCustomerSpeechBubble("Red");
+       UIManager.Instance.ShowCustomerSpeechBubble("Want Red Dress");
     }
 
     void OnClothReceived()
